@@ -34,13 +34,8 @@
   1. [Стандартная библиотека](#standard-library)
   1. [Тестирование](#testing)
   1. [Производительность](#performance)
-  1. [Ресурсы](#resources)
-  1. [В реальной жизни](#in-the-wild)
-  1. [Переводы](#translation)
-  1. [Пообщаться с разработчиками Airbnb](#chat-with-us-about-javascript)
-  1. [Участники перевода](#contributors)
   1. [Лицензия](#license)
-  1. [Поправки](#amendments)
+
 
 ## <a name="types">Типы</a>
 
