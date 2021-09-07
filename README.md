@@ -459,7 +459,7 @@
 
 
   <a name="strings--eval"></a><a name="6.5"></a>
-  - [`NOT USED`6.3](#strings--eval) Никогда не используйте `eval()`, т.к. это открывает множество уязвимостей. eslint: [`no-eval`](https://eslint.org/docs/rules/no-eval)
+  - [6.3](#strings--eval) Никогда не используйте `eval()`, т.к. это открывает множество уязвимостей. eslint: [`no-eval`](https://eslint.org/docs/rules/no-eval)
 
   <a name="strings--escaping"></a>
   - [6.4](#strings--escaping) Не используйте в строках необязательные экранирующие символы. eslint: [`no-useless-escape`](https://eslint.org/docs/rules/no-useless-escape)
@@ -558,16 +558,11 @@
     > Почему? `...` явно говорит о том, какие именно аргументы вы хотите извлечь. Кроме того, такой синтаксис создаёт настоящий массив, а не массивоподобный объект как `arguments`.
 
     ```javascript
-    // плохо
-    function concatenateAll() {
-      const args = Array.prototype.slice.call(arguments);
-      return args.join('');
-    }
-
-    // хорошо
-    function concatenateAll(...args) {
-      return args.join('');
-    }
+    // хорошо  
+     function concatenateAll(){
+       return _.rest(args,0).join('');
+     }
+    
     ```
 
   <a name="es6-default-parameters"></a><a name="7.7"></a>
