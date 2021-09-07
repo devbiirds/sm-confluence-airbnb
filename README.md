@@ -51,7 +51,6 @@
     - `boolean`
     - `null`
     - `undefined`
-    - `symbol`
 
     ```javascript
     var foo = 1;
@@ -59,7 +58,7 @@
 
     bar = 9;
 
-    console.log(foo, bar); // => 1, 9
+    print(foo, bar); // => 1, 9
     ```
 
 
@@ -76,7 +75,7 @@
 
     bar[0] = 9;
 
-    console.log(foo[0], bar[0]); // => 9, 9
+    print(foo[0], bar[0]); // => 9, 9
     ```
 
 **[⬆ к оглавлению](#Оглавление)**
@@ -99,34 +98,8 @@
     var item = {};
     ```
 
-  <a name="es6-computed-properties"></a><a name="3.4"></a>
-  - [`?`3.2](#es6-computed-properties) Используйте вычисляемые имена свойств, когда создаёте объекты с динамическими именами свойств.
-
-    > Почему? Они позволяют вам определить все свойства объекта в одном месте.
-
-    ```javascript
-
-    function getKey(k) {
-      return `a key named ${k}`;
-    }
-
-    // плохо
-    const obj = {
-      id: 5,
-      name: 'San Francisco',
-    };
-    obj[getKey('enabled')] = true;
-
-    // хорошо
-    const obj = {
-      id: 5,
-      name: 'San Francisco',
-      [getKey('enabled')]: true,
-    };
-    ```
-
   <a name="es6-object-shorthand"></a><a name="3.5"></a>
-  - [3.3](#es6-object-shorthand) Используйте сокращённую запись метода объекта. eslint: [`object-shorthand`](https://eslint.org/docs/rules/object-shorthand.html)
+  - [3.2](#es6-object-shorthand) Используйте сокращённую запись метода объекта. eslint: [`object-shorthand`](https://eslint.org/docs/rules/object-shorthand.html)
 
     ```javascript
     // плохо
@@ -151,7 +124,7 @@
   <a name="es6-object-concise"></a><a name="3.6"></a>
   - 
   <a name="objects--quoted-props"></a><a name="3.8"></a>
-  - [3.4](#objects--quoted-props) Только недопустимые идентификаторы помещаются в кавычки. eslint: [`quote-props`](https://eslint.org/docs/rules/quote-props.html)
+  - [3.3](#objects--quoted-props) Только недопустимые идентификаторы помещаются в кавычки. eslint: [`quote-props`](https://eslint.org/docs/rules/quote-props.html)
 
     > Почему? На наш взгляд, такой код легче читать. Это улучшает подсветку синтаксиса, а также облегчает оптимизацию для многих JS-движков.
 
@@ -172,7 +145,7 @@
     ```
 
   <a name="objects--prototype-builtins"></a>
-  - [3.5](#objects--prototype-builtins) Не вызывайте напрямую методы `Object.prototype`, такие как `hasOwnProperty`, `propertyIsEnumerable`, и `isPrototypeOf`. eslint: [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
+  - [3.4](#objects--prototype-builtins) Не вызывайте напрямую методы `Object.prototype`, такие как `hasOwnProperty`, `propertyIsEnumerable`, и `isPrototypeOf`. eslint: [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
 
     > Почему? Эти методы могут быть переопределены в свойствах объекта, который мы проверяем `{ hasOwnProperty: false }`, или этот объект может быть `null` (`Object.create(null)`).
 
@@ -729,27 +702,6 @@
     function f4(a = 1) {
       // ...
     }
-    ```
-
-  <a name="functions--spread-vs-apply"></a><a name="7.14"></a>
-  - [7.14](#functions--spread-vs-apply) Отдавайте предпочтение использованию оператора расширения `...` при вызове вариативной функции. eslint: [`prefer-spread`](https://eslint.org/docs/rules/prefer-spread)
-
-    > Почему? Это чище, вам не нужно предоставлять контекст, и не так просто составить `new` с `apply`.
-
-    ```javascript
-    // плохо
-    const x = [1, 2, 3, 4, 5];
-    console.log.apply(console, x);
-
-    // хорошо
-    const x = [1, 2, 3, 4, 5];
-    console.log(...x);
-
-    // плохо
-    new (Function.prototype.bind.apply(Date, [null, 2016, 8, 5]));
-
-    // хорошо
-    new Date(...[2016, 8, 5]);
     ```
 
   <a name="functions--signature-invocation-indentation"></a>
