@@ -10,7 +10,6 @@
   1. [Деструктуризация](#destructuring)
   1. [Строки](#strings)
   1. [Функции](#functions)
-  1. [Стрелочные функции](#arrow-functions)
   1. [Классы и конструкторы](#classes--constructors)
   1. [Модули](#modules)
   1. [Итераторы и генераторы](#iterators-and-generators)
@@ -52,18 +51,16 @@
     - `boolean`
     - `null`
     - `undefined`
-    - `symbol`
 
     ```javascript
-    const foo = 1;
-    let bar = foo;
+    var foo = 1;
+    var bar = foo;
 
     bar = 9;
 
-    console.log(foo, bar); // => 1, 9
+    print(foo, bar); // => 1, 9
     ```
 
-    - Символы не могут быть полностью заполифиллены, поэтому они не должны использоваться, если разработка ведётся для браузеров/сред, которые не поддерживают их нативно.
 
   <a name="types--complex"></a><a name="1.2"></a>
   - [1.2](#types--complex)  **Сложные типы**: Когда вы взаимодействуете со сложным типом, вы работаете со ссылкой на его значение.
@@ -73,66 +70,39 @@
     - `function`
 
     ```javascript
-    const foo = [1, 2];
-    const bar = foo;
+    var foo = [1, 2];
+    var  bar = foo;
 
     bar[0] = 9;
 
-    console.log(foo[0], bar[0]); // => 9, 9
+    print(foo[0], bar[0]); // => 9, 9
     ```
 
 **[⬆ к оглавлению](#Оглавление)**
 
-## <a name="references">Объявление переменных</a>
+## <a name="references"> Объявление переменных</a>
+ <a name="references--prefer-const"></a><a name="2.1"></a>
+  - [2.1](#references--prefer-const) Если используем переменную без var, то забрасываем её в глобальную область видимости`.
 
-  <a name="references--prefer-const"></a><a name="2.1"></a>
-  - [`NOT USED`2.1](#references--prefer-const) Используйте `const` для объявления переменных; избегайте `var`. eslint: [`prefer-const`](https://eslint.org/docs/rules/prefer-const.html), [`no-const-assign`](https://eslint.org/docs/rules/no-const-assign.html)
-
-    > Почему? Это гарантирует, что вы не сможете переопределять значения, т.к. это может привести к ошибкам и к усложнению понимания кода.
 
     ```javascript
-    // плохо
-    var a = 1;
-    var b = 2;
-
-    // хорошо
-    const a = 1;
-    const b = 2;
+	 var count = 1;
+     if (true) {
+       count += 1;
+     }
     ```
 
   <a name="references--disallow-var"></a><a name="2.2"></a>
-  - [`NOT USED 2.2 `](#references--disallow-var) Если вам необходимо переопределять значения, то используйте `let` вместо `var`. eslint: [`no-var`](https://eslint.org/docs/rules/no-var.html)
+  - [`2.2 `](#references--disallow-var) Если переменная объявлена через var вне функции, то она будет замкнута и закеширована`.
 
-    > Почему? Область видимости `let` — блок, у `var` — функция.
-
-    ```javascript
-    // плохо
-    var count = 1;
-    if (true) {
-      count += 1;
-    }
-
-    // хорошо, используйте let.
-    let count = 1;
-    if (true) {
-      count += 1;
-    }
-    ```
-
-  <a name="references--block-scope"></a><a name="2.3"></a>
-  - [2.3](#references--block-scope) Помните, что у `let` и `const` блочная область видимости.
 
     ```javascript
-    // const и let существуют только в том блоке, в котором они определены.
-    {
-      let a = 1;
-      const b = 1;
-    }
-    console.log(a); // ReferenceError
-    console.log(b); // ReferenceError
+    var foo = (function () {}());
+    function require() {
+      return foo;
+     }
     ```
-
-**[⬆ к оглавлению](#Оглавление)**
+  **[⬆ к оглавлению](#Оглавление)**
 
 ## <a name="objects">Объекты</a>
 
@@ -141,40 +111,14 @@
 
     ```javascript
     // плохо
-    const item = new Object();
+    var item = new Object();
 
     // хорошо
-    const item = {};
-    ```
-
-  <a name="es6-computed-properties"></a><a name="3.4"></a>
-  - [3.2](#es6-computed-properties) Используйте вычисляемые имена свойств, когда создаёте объекты с динамическими именами свойств.
-
-    > Почему? Они позволяют вам определить все свойства объекта в одном месте.
-
-    ```javascript
-
-    function getKey(k) {
-      return `a key named ${k}`;
-    }
-
-    // плохо
-    const obj = {
-      id: 5,
-      name: 'San Francisco',
-    };
-    obj[getKey('enabled')] = true;
-
-    // хорошо
-    const obj = {
-      id: 5,
-      name: 'San Francisco',
-      [getKey('enabled')]: true,
-    };
+    var item = {};
     ```
 
   <a name="es6-object-shorthand"></a><a name="3.5"></a>
-  - [3.3](#es6-object-shorthand) Используйте сокращённую запись метода объекта. eslint: [`object-shorthand`](https://eslint.org/docs/rules/object-shorthand.html)
+  - [3.2](#es6-object-shorthand) Используйте сокращённую запись метода объекта. eslint: [`object-shorthand`](https://eslint.org/docs/rules/object-shorthand.html)
 
     ```javascript
     // плохо
@@ -197,56 +141,9 @@
     ```
 
   <a name="es6-object-concise"></a><a name="3.6"></a>
-  - [3.4](#es6-object-concise) Используйте сокращённую запись свойств объекта. eslint: [`object-shorthand`](https://eslint.org/docs/rules/object-shorthand.html)
-
-    > Почему? Это короче и понятнее.
-
-    ```javascript
-    const lukeSkywalker = 'Luke Skywalker';
-
-    // плохо
-    const obj = {
-      lukeSkywalker: lukeSkywalker,
-    };
-
-    // хорошо
-    const obj = {
-      lukeSkywalker,
-    };
-    ```
-
-  <a name="objects--grouped-shorthand"></a><a name="3.7"></a>
-  - [3.5](#objects--grouped-shorthand) Группируйте ваши сокращённые записи свойств в начале объявления объекта.
-
-    > Почему? Так легче сказать, какие свойства используют сокращённую запись.
-
-    ```javascript
-    const anakinSkywalker = 'Anakin Skywalker';
-    const lukeSkywalker = 'Luke Skywalker';
-
-    // плохо
-    const obj = {
-      episodeOne: 1,
-      twoJediWalkIntoACantina: 2,
-      lukeSkywalker,
-      episodeThree: 3,
-      mayTheFourth: 4,
-      anakinSkywalker,
-    };
-
-    // хорошо
-    const obj = {
-      lukeSkywalker,
-      anakinSkywalker,
-      episodeOne: 1,
-      twoJediWalkIntoACantina: 2,
-      episodeThree: 3,
-      mayTheFourth: 4,
-    };
-    ```
-
+  - 
   <a name="objects--quoted-props"></a><a name="3.8"></a>
-  - [3.6](#objects--quoted-props) Только недопустимые идентификаторы помещаются в кавычки. eslint: [`quote-props`](https://eslint.org/docs/rules/quote-props.html)
+  - [3.3](#objects--quoted-props) Только недопустимые идентификаторы помещаются в кавычки. eslint: [`quote-props`](https://eslint.org/docs/rules/quote-props.html)
 
     > Почему? На наш взгляд, такой код легче читать. Это улучшает подсветку синтаксиса, а также облегчает оптимизацию для многих JS-движков.
 
@@ -267,7 +164,7 @@
     ```
 
   <a name="objects--prototype-builtins"></a>
-  - [3.7](#objects--prototype-builtins) Не вызывайте напрямую методы `Object.prototype`, такие как `hasOwnProperty`, `propertyIsEnumerable`, и `isPrototypeOf`. eslint: [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
+  - [3.4](#objects--prototype-builtins) Не вызывайте напрямую методы `Object.prototype`, такие как `hasOwnProperty`, `propertyIsEnumerable`, и `isPrototypeOf`. eslint: [`no-prototype-builtins`](https://eslint.org/docs/rules/no-prototype-builtins)
 
     > Почему? Эти методы могут быть переопределены в свойствах объекта, который мы проверяем `{ hasOwnProperty: false }`, или этот объект может быть `null` (`Object.create(null)`).
 
@@ -287,7 +184,7 @@
     ```
 
   <a name="objects--rest-spread"></a>
-  - [3.8](#objects--rest-spread) Используйте оператор расширения вместо [`Object.assign`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) для поверхностного копирования объектов. Используйте синтаксис оставшихся свойств, чтобы получить новый объект с некоторыми опущенными свойствами.
+  - [`?`3.6](#objects--rest-spread) Используйте оператор расширения вместо [`Object.assign`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Object/assign) для поверхностного копирования объектов. Используйте синтаксис оставшихся свойств, чтобы получить новый объект с некоторыми опущенными свойствами.
 
     ```javascript
     // очень плохо
@@ -315,17 +212,17 @@
 
     ```javascript
     // плохо
-    const items = new Array();
+    var items = new Array();
 
     // хорошо
-    const items = [];
+    var items = [];
     ```
 
   <a name="arrays--push"></a><a name="4.2"></a>
   - [4.2](#arrays--push) Для добавления элемента в массив используйте [Array#push](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/push) вместо прямого присваивания.
 
     ```javascript
-    const someStack = [];
+    var someStack = [];
 
     // плохо
     someStack[someStack.length] = 'abracadabra';
@@ -335,67 +232,67 @@
     ```
 
   <a name="es6-array-spreads"></a><a name="4.3"></a>
-  - [`NOT USED`4.3](#es6-array-spreads) Для копирования массивов используйте оператор расширения `...`.
+  - [4.3](#es6-array-spreads) Для копирования массивов используйте оператор расширения `...`.
 
     ```javascript
     // плохо
-    const len = items.length;
-    const itemsCopy = [];
-    let i;
+    var len = items.length;
+    var itemsCopy = [];
+    var i;
 
     for (i = 0; i < len; i += 1) {
       itemsCopy[i] = items[i];
     }
 
     // хорошо
-    const itemsCopy = [...items];
+    var itemsCopy = [...items];
     ```
 
   <a name="arrays--from"></a>
   <a name="arrays--from-iterable"></a><a name="4.4"></a>
-  - [`NOT USED`4.4](#arrays--from-iterable) Для преобразования итерируемого объекта в массив используйте оператор расширения `...` вместо [`Array.from`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from).
+  - [4.4](#arrays--from-iterable) Для преобразования итерируемого объекта в массив используйте оператор расширения `...` вместо [`Array.from`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from).
 
     ```javascript
-    const foo = document.querySelectorAll('.foo');
+    var foo = document.querySelectorAll('.foo');
 
     // хорошо
-    const nodes = Array.from(foo);
+    var nodes = Array.from(foo);
 
     // отлично
-    const nodes = [...foo];
+    var nodes = [...foo];
     ```
 
   <a name="arrays--from-array-like"></a>
-  - [`NOT USED`4.5](#arrays--from-array-like) Используйте [`Array.from`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from) для преобразования массивоподобного объекта в массив.
+  - [4.5](#arrays--from-array-like) Используйте [`Array.from`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from) для преобразования массивоподобного объекта в массив.
 
     ```javascript
-    const arrLike = { 0: 'foo', 1: 'bar', 2: 'baz', length: 3 };
+    var arrLike = { 0: 'foo', 1: 'bar', 2: 'baz', length: 3 };
 
     // плохо
-    const arr = Array.prototype.slice.call(arrLike);
+    var arr = Array.prototype.slice.call(arrLike);
 
     // хорошо
-    const arr = Array.from(arrLike);
+    var arr = Array.from(arrLike);
     ```
 
   <a name="arrays--mapping"></a>
-  - [`NOT USED`4.6](#arrays--mapping) Используйте [`Array.from`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from) вместо оператора расширения `...` для маппинга итерируемых объектов, это позволяет избежать создания промежуточного массива.
+  - [4.6](#arrays--mapping) Используйте [`Array.from`](https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Array/from) вместо оператора расширения `...` для маппинга итерируемых объектов, это позволяет избежать создания промежуточного массива.
 
     ```javascript
     // плохо
-    const baz = [...foo].map(bar);
+    var baz = [...foo].map(bar);
 
     // хорошо
-    const baz = Array.from(foo, bar);
+    var baz = Array.from(foo, bar);
     ```
 
   <a name="arrays--callback-return"></a><a name="4.5"></a>
-  - [NOT USED 4.7](#arrays--callback-return) Используйте операторы `return` внутри функций обратного вызова в методах массива. Можно опустить `return`, когда тело функции состоит из одной инструкции, возвращающей выражение без побочных эффектов. [8.2](#arrows--implicit-return). eslint: [`array-callback-return`](https://eslint.org/docs/rules/array-callback-return)
+  - [ 4.7](#arrays--callback-return) Используйте операторы `return` внутри функций обратного вызова в методах массива. Можно опустить `return`, когда тело функции состоит из одной инструкции, возвращающей выражение без побочных эффектов. [8.2](#arrows--implicit-return). eslint: [`array-callback-return`](https://eslint.org/docs/rules/array-callback-return)
 
     ```javascript
     // хорошо
     [1, 2, 3].map((x) => {
-      const y = x + 1;
+      var y = x + 1;
       return x * y;
     });
 
@@ -404,18 +301,18 @@
 
     // плохо - нет возвращаемого значения, следовательно, `acc` становится `undefined` после первой итерации
     [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
-      const flatten = acc.concat(item);
+      var flatten = acc.concat(item);
     });
 
     // хорошо
     [[0, 1], [2, 3], [4, 5]].reduce((acc, item, index) => {
-      const flatten = acc.concat(item);
+      var flatten = acc.concat(item);
       return flatten;
     });
 
     // плохо
     inbox.filter((msg) => {
-      const { subject, author } = msg;
+      var { subject, author } = msg;
       if (subject === 'Mockingbird') {
         return author === 'Harper Lee';
       } else {
@@ -425,7 +322,7 @@
 
     // хорошо
     inbox.filter((msg) => {
-      const { subject, author } = msg;
+      var { subject, author } = msg;
       if (subject === 'Mockingbird') {
         return author === 'Harper Lee';
       }
@@ -439,24 +336,24 @@
 
     ```javascript
     // плохо
-    const arr = [
+    var arr = [
       [0, 1], [2, 3], [4, 5],
     ];
 
-    const objectInArray = [{
+    var objectInArray = [{
       id: 1,
     }, {
       id: 2,
     }];
 
-    const numberInArray = [
+    var numberInArray = [
       1, 2,
     ];
 
     // хорошо
-    const arr = [[0, 1], [2, 3], [4, 5]];
+    var arr = [[0, 1], [2, 3], [4, 5]];
 
-    const objectInArray = [
+    var objectInArray = [
       {
         id: 1,
       },
@@ -465,7 +362,7 @@
       },
     ];
 
-    const numberInArray = [
+    var numberInArray = [
       1,
       2,
     ];
@@ -483,15 +380,15 @@
     ```javascript
     // плохо
     function getFullName(user) {
-      const firstName = user.firstName;
-      const lastName = user.lastName;
+      var firstName = user.firstName;
+      var lastName = user.lastName;
 
       return `${firstName} ${lastName}`;
     }
 
     // хорошо
     function getFullName(user) {
-      const { firstName, lastName } = user;
+      var { firstName, lastName } = user;
       return `${firstName} ${lastName}`;
     }
 
@@ -505,14 +402,14 @@
   - [5.2](#destructuring--array) Используйте деструктуризацию массивов. eslint: [`prefer-destructuring`](https://eslint.org/docs/rules/prefer-destructuring)
 
     ```javascript
-    const arr = [1, 2, 3, 4];
+    var arr = [1, 2, 3, 4];
 
     // плохо
-    const first = arr[0];
-    const second = arr[1];
+    var first = arr[0];
+    var second = arr[1];
 
     // хорошо
-    const [first, second] = arr;
+    var [first, second] = arr;
     ```
 
   <a name="destructuring--object-over-array"></a><a name="5.3"></a>
@@ -528,7 +425,7 @@
     }
 
     // при вызове нужно подумать о порядке возвращаемых данных
-    const [left, __, top] = processInput(input);
+    var [left, __, top] = processInput(input);
 
     // хорошо
     function processInput(input) {
@@ -537,7 +434,7 @@
     }
 
     // при вызове выбираем только необходимые данные
-    const { left, top } = processInput(input);
+    var { left, top } = processInput(input);
     ```
 
 **[⬆ к оглавлению](#Оглавление)**
@@ -545,7 +442,7 @@
 ## <a name="strings">Строки</a>
 
   <a name="strings--quotes"></a><a name="6.1"></a>
-  - [`NOT USED`6.1](#strings--quotes) Используйте одинарные кавычки `''` для строк. eslint: [`quotes`](https://eslint.org/docs/rules/quotes.html)
+  - [6.1](#strings--quotes) Используйте одинарные кавычки `''` для строк. eslint: [`quotes`](https://eslint.org/docs/rules/quotes.html)
 
     ```javascript
     // плохо
@@ -579,38 +476,12 @@
     const errorMessage = 'This is a super long error that was thrown because of Batman. When you stop to think about how Batman had anything to do with this, you would get nowhere fast.';
     ```
 
-  <a name="es6-template-literals"></a><a name="6.4"></a>
-  - [`NOT USED`6.3](#es6-template-literals) При создании строки программным путём используйте шаблонные строки вместо конкатенации. eslint: [`prefer-template`](https://eslint.org/docs/rules/prefer-template.html) [`template-curly-spacing`](https://eslint.org/docs/rules/template-curly-spacing)
-
-    > Почему? Шаблонные строки дают вам читабельность, лаконичный синтаксис с правильными символами перевода строк и функции интерполяции строки.
-
-    ```javascript
-    // плохо
-    function sayHi(name) {
-      return 'How are you, ' + name + '?';
-    }
-
-    // плохо
-    function sayHi(name) {
-      return ['How are you, ', name, '?'].join();
-    }
-
-    // плохо
-    function sayHi(name) {
-      return `How are you, ${ name }?`;
-    }
-
-    // хорошо
-    function sayHi(name) {
-      return `How are you, ${name}?`;
-    }
-    ```
 
   <a name="strings--eval"></a><a name="6.5"></a>
-  - [`NOT USED`6.4](#strings--eval) Никогда не используйте `eval()`, т.к. это открывает множество уязвимостей. eslint: [`no-eval`](https://eslint.org/docs/rules/no-eval)
+  - [6.3](#strings--eval) Никогда не используйте `eval()`, т.к. это открывает множество уязвимостей. eslint: [`no-eval`](https://eslint.org/docs/rules/no-eval)
 
   <a name="strings--escaping"></a>
-  - [6.5](#strings--escaping) Не используйте в строках необязательные экранирующие символы. eslint: [`no-useless-escape`](https://eslint.org/docs/rules/no-useless-escape)
+  - [6.4](#strings--escaping) Не используйте в строках необязательные экранирующие символы. eslint: [`no-useless-escape`](https://eslint.org/docs/rules/no-useless-escape)
 
     > Почему? Обратные слеши ухудшают читабельность, поэтому они должны быть только при необходимости.
 
@@ -666,7 +537,7 @@
   - [7.3](#functions--in-blocks) Никогда не объявляйте функции в нефункциональном блоке (`if`, `while`, и т.д.). Вместо этого присвойте функцию переменной. Браузеры позволяют выполнить ваш код, но все они интерпретируют его по-разному. eslint: [`no-loop-func`](https://eslint.org/docs/rules/no-loop-func.html)
 
   <a name="functions--note-on-blocks"></a><a name="7.4"></a>
-  - [`NOT USED`7.4](#functions--note-on-blocks) **Примечание:** ECMA-262 определяет `блок` как список инструкций. Объявление функции не является инструкцией.
+  - [7.4](#functions--note-on-blocks) **Примечание:** ECMA-262 определяет `блок` как список инструкций. Объявление функции не является инструкцией.
 
     ```javascript
     // плохо
@@ -701,21 +572,16 @@
     ```
 
   <a name="es6-rest"></a><a name="7.6"></a>
-  - [`NOT USED`7.6](#es6-rest) Никогда не используйте `arguments`, вместо этого используйте синтаксис оставшихся параметров `...`. eslint: [`prefer-rest-params`](https://eslint.org/docs/rules/prefer-rest-params)
+  - [7.6](#es6-rest) Никогда не используйте `arguments`, вместо этого используйте синтаксис оставшихся параметров `...`. eslint: [`prefer-rest-params`](https://eslint.org/docs/rules/prefer-rest-params)
 
     > Почему? `...` явно говорит о том, какие именно аргументы вы хотите извлечь. Кроме того, такой синтаксис создаёт настоящий массив, а не массивоподобный объект как `arguments`.
 
     ```javascript
-    // плохо
-    function concatenateAll() {
-      const args = Array.prototype.slice.call(arguments);
-      return args.join('');
-    }
-
-    // хорошо
-    function concatenateAll(...args) {
-      return args.join('');
-    }
+    // хорошо  
+     function concatenateAll(){
+       return _.rest(args,0).join('');
+     }
+    
     ```
 
   <a name="es6-default-parameters"></a><a name="7.7"></a>
@@ -852,27 +718,6 @@
     }
     ```
 
-  <a name="functions--spread-vs-apply"></a><a name="7.14"></a>
-  - [`NOT USED`7.14](#functions--spread-vs-apply) Отдавайте предпочтение использованию оператора расширения `...` при вызове вариативной функции. eslint: [`prefer-spread`](https://eslint.org/docs/rules/prefer-spread)
-
-    > Почему? Это чище, вам не нужно предоставлять контекст, и не так просто составить `new` с `apply`.
-
-    ```javascript
-    // плохо
-    const x = [1, 2, 3, 4, 5];
-    console.log.apply(console, x);
-
-    // хорошо
-    const x = [1, 2, 3, 4, 5];
-    console.log(...x);
-
-    // плохо
-    new (Function.prototype.bind.apply(Date, [null, 2016, 8, 5]));
-
-    // хорошо
-    new Date(...[2016, 8, 5]);
-    ```
-
   <a name="functions--signature-invocation-indentation"></a>
   - [7.15](#functions--signature-invocation-indentation) Функции с многострочным определением или запуском должны содержать такие же отступы, как и другие многострочные списки в этом руководстве: с каждым элементом на отдельной строке, с запятой в конце элемента. eslint: [`function-paren-newline`](https://eslint.org/docs/rules/function-paren-newline)
 
@@ -908,174 +753,11 @@
 
 **[⬆ к оглавлению](#Оглавление)**
 
-## <a name="arrow-functions">`NOT USED`  Стрелочные функции</a>
 
-  <a name="arrows--use-them"></a><a name="8.1"></a>
-  - [`NOT USED`8.1](#arrows--use-them) Когда вам необходимо использовать анонимную функцию (например, при передаче встроенной функции обратного вызова), используйте стрелочную функцию. eslint: [`prefer-arrow-callback`](https://eslint.org/docs/rules/prefer-arrow-callback.html), [`arrow-spacing`](https://eslint.org/docs/rules/arrow-spacing.html)
-
-    > Почему? Таким образом создаётся функция, которая выполняется в контексте `this`, который мы обычно хотим, а также это более короткий синтаксис.
-
-    > Почему бы и нет? Если у вас есть довольно сложная функция, вы можете переместить эту логику внутрь её собственного именованного функционального выражения.
-
-    ```javascript
-    // плохо
-    [1, 2, 3].map(function (x) {
-      const y = x + 1;
-      return x * y;
-    });
-
-    // хорошо
-    [1, 2, 3].map((x) => {
-      const y = x + 1;
-      return x * y;
-    });
-    ```
-
-  <a name="arrows--implicit-return"></a><a name="8.2"></a>
-  - [`NOT USED`8.2](#arrows--implicit-return) Если тело функции состоит из одного оператора, возвращающего [выражение](https://developer.mozilla.org/ru/docs/Web/JavaScript/Guide/Expressions_and_Operators#Выражения) без побочных эффектов, то опустите фигурные скобки и используйте неявное возвращение. В противном случае, сохраните фигурные скобки и используйте оператор `return`. eslint: [`arrow-parens`](https://eslint.org/docs/rules/arrow-parens.html), [`arrow-body-style`](https://eslint.org/docs/rules/arrow-body-style.html)
-
-    > Почему? Синтаксический сахар. Когда несколько функций соединены вместе, то это лучше читается.
-
-    ```javascript
-    // плохо
-    [1, 2, 3].map((number) => {
-      const nextNumber = number + 1;
-      `A string containing the ${nextNumber}.`;
-    });
-
-    // хорошо
-    [1, 2, 3].map((number) => `A string containing the ${number + 1}.`);
-
-    // хорошо
-    [1, 2, 3].map((number) => {
-      const nextNumber = number + 1;
-      return `A string containing the ${nextNumber}.`;
-    });
-
-    // хорошо
-    [1, 2, 3].map((number, index) => ({
-      [index]: number,
-    }));
-
-    // Неявный возврат с побочными эффектами
-    function foo(callback) {
-      const val = callback();
-      if (val === true) {
-        // Сделать что-то, если функция обратного вызова вернёт true
-      }
-    }
-
-    let bool = false;
-
-    // плохо
-    foo(() => bool = true);
-
-    // хорошо
-    foo(() => {
-      bool = true;
-    });
-    ```
-
-  <a name="arrows--paren-wrap"></a><a name="8.3"></a>
-  - [`NOT USED`8.3](#arrows--paren-wrap) В случае, если выражение располагается на нескольких строках, то необходимо обернуть его в скобки для лучшей читаемости.
-
-    > Почему? Это чётко показывает, где функция начинается и где заканчивается.
-
-    ```javascript
-    // плохо
-    ['get', 'post', 'put'].map((httpMethod) => Object.prototype.hasOwnProperty.call(
-        httpMagicObjectWithAVeryLongName,
-        httpMethod,
-      )
-    );
-
-    // хорошо
-    ['get', 'post', 'put'].map((httpMethod) => (
-      Object.prototype.hasOwnProperty.call(
-        httpMagicObjectWithAVeryLongName,
-        httpMethod,
-      )
-    ));
-    ```
-
-  <a name="arrows--one-arg-parens"></a><a name="8.4"></a>
-  - [`NOT USED`8.4](#arrows--one-arg-parens) Всегда оборачивайте аргументы круглыми скобками для ясности и согласованности. eslint: [`arrow-parens`](https://eslint.org/docs/rules/arrow-parens.html)
-    > Почему? Минимизирует различия при удалении или добавлении аргументов.
-
-    ```javascript
-    // плохо
-    [1, 2, 3].map(x => x * x);
-
-    // хорошо
-    [1, 2, 3].map((x) => x * x);
-
-    // плохо
-    [1, 2, 3].map(number => (
-      `A long string with the ${number}. It’s so long that we don’t want it to take up space on the .map line!`
-    ));
-
-    // хорошо
-    [1, 2, 3].map((number) => (
-      `A long string with the ${number}. It’s so long that we don’t want it to take up space on the .map line!`
-    ));
-
-    // плохо
-    [1, 2, 3].map(x => {
-      const y = x + 1;
-      return x * y;
-    });
-
-    // хорошо
-    [1, 2, 3].map((x) => {
-      const y = x + 1;
-      return x * y;
-    });
-    ```
-
-  <a name="arrows--confusing"></a><a name="8.5"></a>
-  - [`NOT USED`8.5](#arrows--confusing) Избегайте схожести стрелочной функции (`=>`) с операторами сравнения (`<=`, `>=`). eslint: [`no-confusing-arrow`](https://eslint.org/docs/rules/no-confusing-arrow)
-
-    ```javascript
-    // плохо
-    const itemHeight = (item) => item.height <= 256 ? item.largeSize : item.smallSize;
-
-    // плохо
-    const itemHeight = (item) => item.height >= 256 ? item.largeSize : item.smallSize;
-
-    // хорошо
-    const itemHeight = (item) => (item.height <= 256 ? item.largeSize : item.smallSize);
-
-    // хорошо
-    const itemHeight = (item) => {
-      const { height, largeSize, smallSize } = item;
-      return height <= 256 ? largeSize : smallSize;
-    };
-    ```
-
-  <a name="whitespace--implicit-arrow-linebreak"></a>
-  - [`NOT USED`8.6](#whitespace--implicit-arrow-linebreak) Зафиксируйте расположение тела стрелочной функции с неявным возвратом. eslint: [`implicit-arrow-linebreak`](https://eslint.org/docs/rules/implicit-arrow-linebreak)
-
-    ```javascript
-    // плохо
-    (foo) =>
-      bar;
-    (foo) =>
-      (bar);
-
-    // хорошо
-    (foo) => bar;
-    (foo) => (bar);
-    (foo) => (
-       bar
-    )
-    ```
-
-**[⬆ к оглавлению](#Оглавление)**
-
-## <a name="classes--constructors">`NOT USED `Классы и конструкторы</a>
+## <a name="classes--constructors">`Классы и конструкторы</a>
 
   <a name="constructors--use-class"></a><a name="9.1"></a>
-  - [`NOT USED`9.1](#constructors--use-class) Всегда используйте `class`. Избегайте прямых манипуляций с `prototype`.
+  - [9.1](#constructors--use-class) Всегда используйте `class`. Избегайте прямых манипуляций с `prototype`.
 
     > Почему? Синтаксис `class` является кратким и понятным.
 
@@ -1104,7 +786,7 @@
     ```
 
   <a name="constructors--extends"></a><a name="9.2"></a>
-  - [`NOT USED`9.2](#constructors--extends) Используйте `extends` для наследования.
+  - [9.2](#constructors--extends) Используйте `extends` для наследования.
 
     > Почему? Это встроенный способ наследовать функциональность прототипа, не нарушая `instanceof`.
 
@@ -1128,7 +810,7 @@
     ```
 
   <a name="constructors--chaining"></a><a name="9.3"></a>
-  - [`NOT USED`9.3](#constructors--chaining) Методы могут возвращать `this`, чтобы делать цепочки вызовов.
+  - [9.3](#constructors--chaining) Методы могут возвращать `this`, чтобы делать цепочки вызовов.
 
     ```javascript
     // плохо
@@ -1165,7 +847,7 @@
     ```
 
   <a name="constructors--tostring"></a><a name="9.4"></a>
-  - [`NOT USED`9.4](#constructors--tostring) Вы можете определить свой собственный метод `toString()`, просто убедитесь, что он успешно работает и не создаёт никаких побочных эффектов.
+  - [9.4](#constructors--tostring) Вы можете определить свой собственный метод `toString()`, просто убедитесь, что он успешно работает и не создаёт никаких побочных эффектов.
 
     ```javascript
     class Jedi {
@@ -1184,7 +866,7 @@
     ```
 
   <a name="constructors--no-useless"></a><a name="9.5"></a>
-  - [`NOT USED`9.5](#constructors--no-useless) У классов есть конструктор по умолчанию, если он не задан явно. Можно опустить пустой конструктор или конструктор, который только делегирует выполнение родительскому классу. eslint: [`no-useless-constructor`](https://eslint.org/docs/rules/no-useless-constructor)
+  - [9.5](#constructors--no-useless) У классов есть конструктор по умолчанию, если он не задан явно. Можно опустить пустой конструктор или конструктор, который только делегирует выполнение родительскому классу. eslint: [`no-useless-constructor`](https://eslint.org/docs/rules/no-useless-constructor)
 
     ```javascript
     // плохо
@@ -1213,7 +895,7 @@
     ```
 
   <a name="classes--no-duplicate-members"></a>
-  - [`NOT USED`9.6](#classes--no-duplicate-members) Избегайте дублирующих членов класса. eslint: [`no-dupe-class-members`](https://eslint.org/docs/rules/no-dupe-class-members)
+  - [9.6](#classes--no-duplicate-members) Избегайте дублирующих членов класса. eslint: [`no-dupe-class-members`](https://eslint.org/docs/rules/no-dupe-class-members)
 
     > Почему? Если объявление члена класса повторяется, без предупреждения будет использовано последнее. Наличие дубликатов скорее всего приведёт к ошибке.
 
@@ -1236,7 +918,7 @@
     ```
 
   <a name="classes--methods-use-this"></a>
-  - [`NOT USED`9.7](#classes--methods-use-this) Метод класса должен использовать `this` или быть преобразованным в статический метод, если только внешняя библиотека или фреймворк не требуют использования определённых нестатических методов. Будучи методом экземпляра, следует указать, что он ведёт себя по-разному в зависимости от свойств получателя. eslint: [`class-methods-use-this`](https://eslint.org/docs/rules/class-methods-use-this)
+  - [9.7](#classes--methods-use-this) Метод класса должен использовать `this` или быть преобразованным в статический метод, если только внешняя библиотека или фреймворк не требуют использования определённых нестатических методов. Будучи методом экземпляра, следует указать, что он ведёт себя по-разному в зависимости от свойств получателя. eslint: [`class-methods-use-this`](https://eslint.org/docs/rules/class-methods-use-this)
 
     ```javascript
     // плохо
@@ -1267,10 +949,10 @@
 
 **[⬆ к оглавлению](#Оглавление)**
 
-## <a name="modules">`NOT USED `Модули</a>
+## <a name="modules">Модули</a>
 
   <a name="modules--use-them"></a><a name="10.1"></a>
-  - [`NOT USED `10.1](#modules--use-them) Всегда используйте модули (`import`/`export`) вместо нестандартных модульных систем. Вы всегда сможете транспилировать код в вашу любимую модульную систему.
+  - [10.1](#modules--use-them) Всегда используйте модули (`import`/`export`) вместо нестандартных модульных систем. Вы всегда сможете транспилировать код в вашу любимую модульную систему.
 
     > Почему? Модули — это будущее. Давайте начнём использовать будущее уже сейчас!
 
@@ -1289,7 +971,7 @@
     ```
 
   <a name="modules--no-wildcard"></a><a name="10.2"></a>
-  - [`NOT USED`10.2](#modules--no-wildcard) Не используйте импорт через `*`.
+  - [10.2](#modules--no-wildcard) Не используйте импорт через `*`.
 
     > Почему? Это гарантирует, что у вас есть единственный экспорт по умолчанию.
 
@@ -1302,7 +984,7 @@
     ```
 
   <a name="modules--no-export-from-import"></a><a name="10.3"></a>
-  - [`NOT USED`10.3](#modules--no-export-from-import) Не экспортируйте прямо из импорта.
+  - [10.3](#modules--no-export-from-import) Не экспортируйте прямо из импорта.
 
     > Почему? Несмотря на то, что запись в одну строку является краткой, разделение на отдельные строки делает вещи последовательными.
 
@@ -1318,7 +1000,7 @@
     ```
 
   <a name="modules--no-duplicate-imports"></a>
-  - [`NOT USED`10.4](#modules--no-duplicate-imports) Импортируйте из пути только один раз.
+  - [10.4](#modules--no-duplicate-imports) Импортируйте из пути только один раз.
  eslint: [`no-duplicate-imports`](https://eslint.org/docs/rules/no-duplicate-imports)
     > Почему? Наличие нескольких строк, которые импортируют из одного и того же файла, может сделать код неподдерживаемым.
 
@@ -1339,7 +1021,7 @@
     ```
 
   <a name="modules--no-mutable-exports"></a>
-  - [`NOT USED` 10.5](#modules--no-mutable-exports) Не экспортируйте изменяемые переменные.
+  - [10.5](#modules--no-mutable-exports) Не экспортируйте изменяемые переменные.
  eslint: [`import/no-mutable-exports`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-mutable-exports.md)
     > Почему? Вообще, следует избегать мутации, в особенности при экспорте изменяемых переменных. Несмотря на то, что эта техника может быть необходима в редких случаях, в основном только константа должна быть экспортирована.
 
@@ -1354,7 +1036,7 @@
     ```
 
   <a name="modules--prefer-default-export"></a>
-  - [`NOT USED`10.6](#modules--prefer-default-export) В модулях с единственным экспортом предпочтительнее использовать экспорт по умолчанию, а не экспорт по имени.
+  - [10.6](#modules--prefer-default-export) В модулях с единственным экспортом предпочтительнее использовать экспорт по умолчанию, а не экспорт по имени.
  eslint: [`import/prefer-default-export`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/prefer-default-export.md)
     > Почему? Для того чтобы поощрять создание множества файлов, которые бы экспортировали одну сущность, т.к. это лучше для читабельности и поддержки кода.
 
@@ -1367,7 +1049,7 @@
     ```
 
   <a name="modules--imports-first"></a>
-  - [`NOT USED` 10.7](#modules--imports-first) Поместите все импорты выше остальных инструкций.
+  - [10.7](#modules--imports-first) Поместите все импорты выше остальных инструкций.
  eslint: [`import/first`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/first.md)
     > Почему? Так как `import` обладает подъёмом, то хранение их всех в начале файла предотвращает от неожиданного поведения.
 
@@ -1386,7 +1068,7 @@
     ```
 
   <a name="modules--multiline-imports-over-newlines"></a>
-  - [`NOT USED` 10.8](#modules--multiline-imports-over-newlines) Импорты на нескольких строках должны быть с отступами как у многострочных литералов массива и объекта.
+  - [10.8](#modules--multiline-imports-over-newlines) Импорты на нескольких строках должны быть с отступами как у многострочных литералов массива и объекта.
 
     > Почему? Фигурные скобки следуют тем же правилам отступа как и любая другая фигурная скобка блока в этом руководстве, тоже самое касается висячих запятых.
 
@@ -1405,7 +1087,7 @@
     ```
 
   <a name="modules--no-webpack-loader-syntax"></a>
-  - [`NOT USED`10.9](#modules--no-webpack-loader-syntax) Запретите синтаксис загрузчика Webpack в импорте.
+  - [10.9](#modules--no-webpack-loader-syntax) Запретите синтаксис загрузчика Webpack в импорте.
  eslint: [`import/no-webpack-loader-syntax`](https://github.com/benmosher/eslint-plugin-import/blob/master/docs/rules/no-webpack-loader-syntax.md)
     > Почему? Использование Webpack синтаксиса связывает код с упаковщиком модулей. Предпочтительно использовать синтаксис загрузчика в `webpack.config.js`.
 
@@ -3623,6 +3305,5 @@ IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY
 CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT,
 TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-
 
 
